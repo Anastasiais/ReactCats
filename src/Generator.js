@@ -1,4 +1,4 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import LogoSrc from "./assets/cat.png";
 import Checkbox from "./components/Checkbox";
@@ -19,12 +19,22 @@ const url = "https://api.thecatapi.com/v1/images/search";
 function Generator() {
   const [catUrl, setCatUrl] = useState("");
   const [checked, toggleCheckbox] = useState({
-    checkbox1: false, checkbox2: false, disabled: true
+    checkbox1: false,
+    checkbox2: false,
+    disabled: true,
   });
 
   useEffect(() => {
-    getCat()
-}, [])
+    getCat();
+    if (checked.checkbox2) {
+      const update_interval = setInterval(() => {
+        getCat();
+      }, 5000);
+      return () => {
+        clearInterval(update_interval);
+      };
+    }
+  }, [checked.checkbox2]);
 
   const getDisabled = (state) => {
     if (state.checkbox1 || state.checkbox2) {
@@ -34,30 +44,20 @@ function Generator() {
     } else {
       return true;
     }
-};
+  };
 
-   const handleCheckbox = (checkbox) => {
+  const handleCheckbox = (checkbox) => {
     toggleCheckbox({
       ...checked,
       [checkbox]: !checked[checkbox],
-      disabled: getDisabled(checked)
+      disabled: getDisabled(checked),
     });
-    funcRefresh()
-}
-    const isDisabled = !(checked.checkbox1)
-    const checkDisable = isDisabled ? 'disabled' : ''
+  };
 
-    const funcRefresh = () =>{
-    if (checked.checkbox2) {
-      setInterval(() => {
-          getCat()
-      }, 5000);
-    } else if(!checked.checkbox2) {
-        clearInterval(funcRefresh)
-      }
-    }
+  const isDisabled = !checked.checkbox1;
+  const checkDisable = isDisabled ? "disabled" : "";
 
-    const getCat = () => {
+  const getCat = () => {
     fetch(url, {
       headers: {
         "x-api-key": apiKey,
@@ -68,36 +68,33 @@ function Generator() {
         const catUrl = cats[0].url;
         setCatUrl(catUrl);
       });
-};
-
+  };
 
   return (
-     <div>
-    <Checkbox
-     label="Enabled"
-     onChange={() => handleCheckbox('checkbox1')}
-     checked={checked.checkbox1}
-    />
-    <Checkbox
-      label="Auto-refresh every 5 seconds"
-      onChange={() => handleCheckbox('checkbox2')}
-      checked={checked.checkbox2}
+    <div>
+      <Checkbox
+        label="Enabled"
+        onChange={() => handleCheckbox("checkbox1")}
+        checked={checked.checkbox1}
+      />
+      <Checkbox
+        label="Auto-refresh every 5 seconds"
+        onChange={() => handleCheckbox("checkbox2")}
+        checked={checked.checkbox2}
+      />
 
-    />
+      <Button disabled={checkDisable} onClick={getCat} />
 
-    <Button disabled={checkDisable}  onClick={getCat}  />
-
-    <Logo
-      src={catUrl}
-      alt=""
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = { LogoSrc };
+      <Logo
+        src={catUrl}
+        alt=""
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = { LogoSrc };
         }}
       />
     </div>
   );
-
-};
+}
 
 export default Generator;
