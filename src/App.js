@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import styled from "styled-components";
+import Generator from "./Generator";
+
+const Title= styled.h1`
+  text-align: center;
+`;
+
+const AppContainer = styled.div`
+  position: relative;
+  margin: 0 auto;
+  border: 1px solid black;
+  width: 100%;
+  &::after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+`;
+const Content = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
+
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Title>Cat generator </Title>
+      <AppContainer>
+        <Content>
+          <Generator />
+        </Content>
+      </AppContainer>
+
     </div>
   );
 }
