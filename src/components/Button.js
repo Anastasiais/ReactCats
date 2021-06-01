@@ -5,7 +5,7 @@ const StyledButton = styled.button`
   width: 40%;
   height: 40px;
   align-items: center;
-  margin: 5px auto;
+  margin: 5px 5px;
   cursor: ${props => props.disabled? "not allowed" : "pointer"};
 `;
 
