@@ -27,11 +27,11 @@ function Generator() {
   useEffect(() => {
     getCat();
     if (checked.checkbox2) {
-      const update_interval = setInterval(() => {
+      const updateInterval = setInterval(() => {
         getCat();
       }, 5000);
       return () => {
-        clearInterval(update_interval);
+        clearInterval(updateInterval);
       };
     }
   }, [checked.checkbox2]);
